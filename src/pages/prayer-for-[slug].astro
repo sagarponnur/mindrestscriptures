@@ -1,0 +1,71 @@
+---
+// src/pages/prayer-for-[slug].astro
+
+const { slug } = Astro.params;
+
+// Format the slug for display: replace dashes with spaces and capitalize
+const formattedEmotion = slug
+  ? slug.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase())
+  : "Healing";
+
+const pageTitle = `Prayer for when you feel ${formattedEmotion} | MindRest Scriptures`;
+const metaDescription = `Find comfort, Bible verses, and a guided prayer for when your heart is feeling ${formattedEmotion.toLowerCase()}.`;
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    
+    <title>{pageTitle}</title>
+    <meta name="description" content={metaDescription} />
+    
+    <style is:global>
+      body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f2fbf5; color: #1b4332; max-width: 600px; margin: 0 auto; padding: 40px 20px; text-align: center; }
+      h1 { font-weight: 600; margin-bottom: 10px; }
+      p { color: #40916c; margin-bottom: 30px; font-size: 1.1rem; }
+      .breathe-circle { width: 60px; height: 60px; border-radius: 50%; background: #a3b18a; margin: 20px auto; animation: pulse 4s infinite ease-in-out; }
+      #prayer-result { text-align: left; padding: 25px; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.05); min-height: 120px; line-height: 1.6; border-top: 4px solid #52b788; display: none; margin-bottom: 15px; }
+      .home-link { display: inline-block; margin-top: 30px; color: #40916c; text-decoration: none; font-weight: 500; }
+      .home-link:hover { text-decoration: underline; }
+      @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.5); opacity: 0.4; } 100% { transform: scale(1); opacity: 0.8; } }
+    </style>
+  </head>
+  <body>
+    <h1>Prayer for {formattedEmotion}</h1>
+    <p>A comforting scripture and reflection for your heart today.</p>
+
+    <div id="breathe-guide" class="breathe-circle"></div>
+    <div id="prayer-result"></div>
+    
+    <a href="/" class="home-link">← Back to all emotions</a>
+
+    <script define:vars={{ emotionName: formattedEmotion }}>
+      async function loadSEOPrayer() {
+        const resultDiv = document.getElementById('prayer-result');
+        const breatheGuide = document.getElementById('breathe-guide');
+        
+        try {
+          const response = await fetch('/api/generate-prayer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ emotion: emotionName })
+          });
+          
+          const data = await response.json();
+          breatheGuide.style.display = "none";
+          
+          if (data.prayer) {
+            resultDiv.innerHTML = data.prayer.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+            resultDiv.style.display = "block";
+          }
+        } catch (error) {
+          breatheGuide.style.display = "none";
+          resultDiv.innerHTML = `<span style='color: red;'>Network error. Please try again.</span>`;
+          resultDiv.style.display = "block";
+        }
+      }
+      
+      loadSEOPrayer();
+    </script>
+  </body>
+</html>

@@ -1,34 +1,12 @@
 ---
 // src/pages/index.astro
-const emotions = [
-  { name: "Abandoned", emoji: "🏚️" }, { name: "Afraid", emoji: "😨" }, { name: "Agitated", emoji: "😖" }, { name: "Angry", emoji: "😡" }, { name: "Anxious", emoji: "😰" },
-  { name: "Apathetic", emoji: "😐" }, { name: "Apprehensive", emoji: "😬" }, { name: "Ashamed", emoji: "😳" }, { name: "Betrayed", emoji: "💔" }, { name: "Bitter", emoji: "😒" },
-  { name: "Brokenhearted", emoji: "💔" }, { name: "Burdened", emoji: "🎒" }, { name: "Burned Out", emoji: "😮‍💨" }, { name: "Confused", emoji: "😕" }, { name: "Defeated", emoji: "😞" },
-  { name: "Depressed", emoji: "🌧️" }, { name: "Despairing", emoji: "😩" }, { name: "Devastated", emoji: "😭" }, { name: "Disappointed", emoji: "😞" }, { name: "Disconnected", emoji: "🔌" },
-  { name: "Discouraged", emoji: "📉" }, { name: "Disillusioned", emoji: "🌫️" }, { name: "Doubtful", emoji: "🤨" }, { name: "Drained", emoji: "🪫" }, { name: "Empty", emoji: "🕳️" },
-  { name: "Envious", emoji: "🐍" }, { name: "Exhausted", emoji: "😫" }, { name: "Fearful", emoji: "🫣" }, { name: "Frustrated", emoji: "😤" }, { name: "Grieving", emoji: "🕊️" },
-  { name: "Guilty", emoji: "🫣" }, { name: "Heartbroken", emoji: "💔" }, { name: "Helpless", emoji: "🛶" }, { name: "Hesitant", emoji: "🫤" }, { name: "Hopeless", emoji: "🌑" },
-  { name: "Hurt", emoji: "🤕" }, { name: "Inadequate", emoji: "🤏" }, { name: "Insecure", emoji: "🛡️" }, { name: "Insignificant", emoji: "🐜" }, { name: "Intimidated", emoji: "😰" },
-  { name: "Isolated", emoji: "🏝️" }, { name: "Jealous", emoji: "😒" }, { name: "Judged", emoji: "⚖️" }, { name: "Lonely", emoji: "👤" }, { name: "Lost", emoji: "🧭" },
-  { name: "Misunderstood", emoji: "👽" }, { name: "Nervous", emoji: "😬" }, { name: "Numb", emoji: "🧊" }, { name: "Out of Control", emoji: "🎢" }, { name: "Overwhelmed", emoji: "🌊" },
-  { name: "Panicked", emoji: "🚨" }, { name: "Paralyzed", emoji: "🧍" }, { name: "Pessimistic", emoji: "🌧️" }, { name: "Powerless", emoji: "🔋" }, { name: "Pressured", emoji: "🗜️" },
-  { name: "Regretful", emoji: "⏪" }, { name: "Rejected", emoji: "🚫" }, { name: "Resentful", emoji: "😠" }, { name: "Restless", emoji: "🪑" }, { name: "Sad", emoji: "😢" },
-  { name: "Scared", emoji: "😱" }, { name: "Shattered", emoji: "🏺" }, { name: "Shocked", emoji: "😲" }, { name: "Sorrowful", emoji: "🥀" }, { name: "Stressed", emoji: "😫" },
-  { name: "Stuck", emoji: "🕸️" }, { name: "Tearful", emoji: "🥲" }, { name: "Terrified", emoji: "😨" }, { name: "Tired", emoji: "🥱" }, { name: "Trapped", emoji: "📦" },
-  { name: "Troubled", emoji: "🌪️" }, { name: "Unappreciated", emoji: "🥀" }, { name: "Uncertain", emoji: "🤷" }, { name: "Unforgiving", emoji: "🛑" }, { name: "Unloved", emoji: "🥀" },
-  { name: "Unmotivated", emoji: "🛋️" }, { name: "Unsettled", emoji: "🌬️" }, { name: "Unsupported", emoji: "🩼" }, { name: "Unsure", emoji: "🤔" }, { name: "Unworthy", emoji: "😔" },
-  { name: "Upset", emoji: "😡" }, { name: "Vulnerable", emoji: "🐚" }, { name: "Weak", emoji: "🍂" }, { name: "Weary", emoji: "🐪" }, { name: "Worried", emoji: "😟" },
-  { name: "Worthless", emoji: "🗑️" }, { name: "Yearning", emoji: "🥺" }, { name: "Longing", emoji: "🌠" }, { name: "Empty Inside", emoji: "🕳️" }, { name: "Sinking", emoji: "⚓" },
-  { name: "Desperate", emoji: "🆘" }, { name: "Failing", emoji: "📉" }, { name: "Flawed", emoji: "🧩" }, { name: "Invisible", emoji: "🫥" }, { name: "Overlooked", emoji: "🔍" },
-  { name: "Shut Down", emoji: "🛑" }, { name: "Tense", emoji: "😬" }, { name: "Ungrounded", emoji: "🎈" }, { name: "Voiceless", emoji: "😶" }, { name: "Wandering", emoji: "🚶" }
-];
+import { emotions } from '../data/emotions.js';
 ---
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>MindRest Scriptures</title>
-    <!-- NEW: is:global prevents Astro from stripping styles from our JavaScript elements -->
     <style is:global>
       body {
         font-family: 'Segoe UI', system-ui, sans-serif;
@@ -96,7 +74,6 @@ const emotions = [
         font-size: 16px;
         display: flex;
         align-items: center;
-        /* NEW: This pushes the text to the left and the emoji to the right */
         justify-content: space-between;
         transition: all 0.2s ease;
       }
@@ -173,6 +150,11 @@ const emotions = [
       <button id="btn-stop" class="control-btn">⏹ Stop</button>
     </div>
 
+    <!-- Links directly to your dynamic SEO directory -->
+    <footer style="margin-top: 50px; padding-bottom: 20px;">
+      <a href="/directory" style="color: #52b788; text-decoration: none; font-size: 0.9rem;">Browse all emotions</a>
+    </footer>
+
     <script>
       const searchInput = document.getElementById('emotion-search');
       const searchResults = document.getElementById('search-results');
@@ -197,7 +179,6 @@ const emotions = [
       }
 
       async function fetchAndDisplayPrayer(emotionObj) {
-        // NEW: Updates the input field to show "Emotion Emoji"
         searchInput.value = `${emotionObj.name} ${emotionObj.emoji}`;
         searchInput.disabled = true; 
         searchResults.style.display = 'none'; 
@@ -218,7 +199,6 @@ const emotions = [
           
           if (data.prayer) {
             currentPrayerText = data.prayer;
-            // Parses the AI's markdown bolding into HTML
             resultDiv.innerHTML = currentPrayerText
               .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
               .replace(/\n/g, '<br>');
@@ -257,7 +237,6 @@ const emotions = [
               emojiSpan.className = 'emoji';
               emojiSpan.textContent = match.emoji;
               
-              // NEW: Append the text first, then the emoji so the text is on the left
               li.appendChild(textSpan);
               li.appendChild(emojiSpan);
               

@@ -1,0 +1,40 @@
+---
+// src/pages/directory.astro
+
+import { emotions } from '../data/emotions.js';
+
+const slugify = (text) => text.toLowerCase().replace(/\s+/g, '-');
+
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Emotions Directory | MindRest Scriptures</title>
+    <meta name="description" content="Browse our complete directory of Bible verses and prayers for every human emotion." />
+    <style>
+      body { font-family: 'Segoe UI', system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; background: #f2fbf5; color: #1b4332; text-align: center; }
+      h1 { font-weight: 600; margin-bottom: 10px; }
+      p { color: #40916c; margin-bottom: 30px; font-size: 1.1rem; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 30px; text-align: left; }
+      a { background: white; padding: 15px; border-radius: 8px; text-decoration: none; color: #2d6a4f; border: 1px solid #b7e4c7; transition: 0.2s; font-weight: 500; display: flex; gap: 10px; align-items: center; }
+      a:hover { background: #e9f5ec; border-color: #52b788; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+      .home-link { display: inline-block; margin-top: 40px; color: #40916c; text-decoration: none; font-weight: 500; border: none; background: transparent; padding: 0; justify-content: center; }
+      .home-link:hover { text-decoration: underline; background: transparent; transform: none; box-shadow: none; border-color: transparent; }
+    </style>
+  </head>
+  <body>
+    <h1>Emotions & Prayers Directory</h1>
+    <p>Find a prayer for exactly how you are feeling.</p>
+    
+    <div class="grid">
+      {emotions.map((emotion) => (
+        <a href={`/prayer-for-${slugify(emotion.name)}`}>
+          <span>{emotion.emoji}</span> {emotion.name}
+        </a>
+      ))}
+    </div>
+
+    <a href="/" class="home-link">← Back to Home</a>
+  </body>
+</html>
