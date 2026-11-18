@@ -1,47 +1,94 @@
 ---
 // src/pages/directory.astro
-
 import { emotions } from '../data/emotions.js';
-
-const slugify = (text) => text.toLowerCase().replace(/\s+/g, '-');
-
 ---
+
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Emotions Directory | MindRest Scriptures</title>
-    <meta name="description" content="Browse our complete directory of Bible verses and prayers for every human emotion." />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>Browse All Emotions | MindRest Scriptures</title>
     <style>
-      body { font-family: 'Segoe UI', system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; background: #f2fbf5; color: #1b4332; text-align: center; }
-      h1 { font-weight: 600; margin-bottom: 10px; }
-      p { color: #40916c; margin-bottom: 30px; font-size: 1.1rem; }
-      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 30px; text-align: left; }
-      a { background: white; padding: 15px; border-radius: 8px; text-decoration: none; color: #2d6a4f; border: 1px solid #b7e4c7; transition: 0.2s; font-weight: 500; display: flex; gap: 10px; align-items: center; }
-      a:hover { background: #e9f5ec; border-color: #52b788; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-      .home-link { display: inline-block; margin-top: 40px; color: #40916c; text-decoration: none; font-weight: 500; border: none; background: transparent; padding: 0; justify-content: center; }
-      .home-link:hover { text-decoration: underline; background: transparent; transform: none; box-shadow: none; border-color: transparent; }
+      /* Emotion Grid Styling */
+      .emotion-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 0 20px;
+      }
+      .emotion-card {
+        background: #f9fbf9;
+        border: 1px solid #d8eadd;
+        border-radius: 8px;
+        padding: 15px;
+        text-decoration: none;
+        color: #2d3748;
+        font-weight: bold;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .emotion-card:hover {
+        background: #eef7f1;
+        border-color: #b7e4c7;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      }
+      
+      /* Navigation Bar Styling */
+      .nav-links {
+        margin-top: 25px;
+        text-align: center;
+      }
+      .nav-links a {
+        color: #40916c;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+      .nav-links a:hover {
+        text-decoration: underline;
+      }
     </style>
   </head>
-  <body>
-    <h1>Emotions & Prayers Directory</h1>
-    <p>Find a prayer for exactly how you are feeling.</p>
+  <body style="font-family: sans-serif; text-align: center; padding: 2rem;">
     
-    <div class="grid">
-      {emotions.map((emotion) => (
-        <a href={`/prayer-for-${slugify(emotion.name)}`}>
-          <span>{emotion.emoji}</span> {emotion.name}
+    <!-- Branding -->
+    <img src="/logo.png" alt="MindRest Scriptures Logo" style="max-width: 250px; margin: 0 auto 10px auto; display: block;" />
+    <p style="font-style: italic; color: #40916c; margin-bottom: 30px; font-size: 1.1rem;">
+      "Find peace for your mind, rooted in His word."
+    </p>
+
+    <h1 style="color: #2d3748; font-size: 1.8rem; margin-bottom: 20px;">Browse All Emotions</h1>
+    
+    <!-- Dynamic Emotion Grid -->
+    <div class="emotion-grid">
+      {emotions.map(emotion => (
+        <a href={`/prayer-for-${emotion.name.toLowerCase().replace(/\s+/g, '-')}`} class="emotion-card">
+          <span>{emotion.name}</span>
+          <span>{emotion.emoji}</span>
         </a>
       ))}
     </div>
-   <div style="display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px;">
 
-    <a href="https://rzp.io/rzp/RrXZMZu" target="_blank" style="color: #40916c; text-decoration: none; font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
-      <span>☕</span> Support this project ($5)
-    </a>
-  </div>
-
-    <a href="/" class="home-link">← Back to Home</a>
+    <!-- Footer -->
+    <footer style="margin-top: 50px; padding-bottom: 20px; text-align: center; width: 100%;">
+      <div style="display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px;">
+        <a href="https://rzp.io/rzp/RrXZMZu" target="_blank" style="color: #40916c; text-decoration: none; font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
+          <span>☕</span> Support this project ($5)
+        </a>
+      </div>
+      
+      <div class="nav-links">
+        <a href="/">&larr; Back to Home</a>
+      </div>
+    </footer>
 
   </body>
 </html>
