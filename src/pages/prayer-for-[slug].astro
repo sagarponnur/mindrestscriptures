@@ -1,108 +1,14 @@
 ---
-// src/pages/prayer-for-[slug].astro
 import { emotions } from '../data/emotions.js';
 
-export function getStaticPaths() {
-  return emotions.map(emotion => ({
-    params: { slug: emotion.name.toLowerCase().replace(/\s+/g, '-') },
-    props: { emotion },
-  }));
+// 1. Get the slug directly from the URL in SSR mode
+const { slug } = Astro.params;
+
+// 2. Find the matching emotion in your data file
+const emotion = emotions.find(e => e.name.toLowerCase().replace(/\s+/g, '-') === slug);
+
+// 3. Fallback: If someone types a broken URL, send them to the homepage safely
+if (!emotion) {
+  return Astro.redirect('/');
 }
-
-const { emotion } = Astro.props;
 ---
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <title>Prayer for {emotion.name} | MindRest Scriptures</title>
-  </head>
-  <body style="font-family: sans-serif; text-align: center; padding: 2rem;">
-    
-    <!-- Branding -->
-    <img src="/logo.png" alt="MindRest Scriptures Logo" style="max-width: 250px; margin: 0 auto 10px auto; display: block;" />
-    <p style="font-style: italic; color: #40916c; margin-bottom: 30px; font-size: 1.1rem;">
-      "Find peace for your mind, rooted in His word."
-    </p>
-
-    <!-- Header & Generate Button -->
-    <h1>Prayer for Feeling {emotion.name} {emotion.emoji}</h1>
-    <button id="generate-btn" data-emotion="{emotion.name}" style="padding: 10px 20px; background-color: #40916c; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem;">
-      Generate Prayer
-    </button>
-
-    <!-- Loading State -->
-    <div id="loading" style="display: none; margin-top: 20px; color: #666;">
-      Reflecting and generating your audio...
-    </div>
-
-    <!-- Generated Text -->
-    <div id="prayer-text-container" style="margin-top: 20px; font-size: 1.2rem; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto; white-space: pre-wrap;"></div>
-
-    <!-- Hidden Audio Player -->
-    <div id="audio-container" style="display: none; margin-top: 30px; text-align: center;">
-      <p style="font-size: 0.9rem; color: #40916c; margin-bottom: 8px;">Listen to your prayer:</p>
-      <audio id="prayer-audio" controls style="width: 100%; max-width: 300px;"></audio>
-    </div>
-
-    <!-- Footer with Razorpay -->
-    <footer style="margin-top: 50px; padding-bottom: 20px; text-align: center; width: 100%;">
-      <div style="display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px;">
-        <a href="/directory" style="color: #52b788; text-decoration: none; font-size: 0.9rem;">Browse all emotions</a>
-        <span style="color: #b7e4c7; font-size: 0.9rem;">|</span>
-        <a href="YOUR_RAZORPAY_LINK_HERE" target="_blank" style="color: #40916c; text-decoration: none; font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
-          <span>☕</span> Support this project ($5)
-        </a>
-      </div>
-    </footer>
-
-    <!-- Fetch Logic -->
-    <script>
-      const btn = document.getElementById('generate-btn');
-      const loading = document.getElementById('loading');
-      const textContainer = document.getElementById('prayer-text-container');
-      const audioContainer = document.getElementById('audio-container');
-      const prayerAudio = document.getElementById('prayer-audio');
-
-      btn.addEventListener('click', async () => {
-        const emotion = btn.getAttribute('data-emotion');
-        
-        // Reset UI
-        textContainer.innerText = '';
-        audioContainer.style.display = 'none';
-        loading.style.display = 'block';
-        btn.disabled = true;
-
-        try {
-          // Point this to where your PHP file is hosted
-          const response = await fetch('https://yanissesanabria.com/api/generate.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ emotion: emotion })
-          });
-          
-          const data = await response.json();
-
-          // Update UI
-          loading.style.display = 'none';
-          btn.disabled = false;
-
-          // Inject Text
-          textContainer.innerText = data.text;
-
-          // Inject Audio
-          prayerAudio.src = data.audio_url;
-          audioContainer.style.display = 'block';
-          
-        } catch (error) {
-          console.error("Error generating prayer:", error);
-          loading.innerText = 'Error connecting to server. Please try again.';
-          btn.disabled = false;
-        }
-      });
-    </script>
-  </body>
-</html>
