@@ -2,15 +2,25 @@
 // src/pages/prayer-for-[slug].astro
 import { emotions } from '../data/emotions.js';
 
-// Bulletproof Static Generation for Netlify
+export const prerender = true;
+
 export function getStaticPaths() {
-  return emotions.map(emotion => ({
-    params: { slug: emotion.name.toLowerCase().replace(/\s+/g, '-') },
-    props: { emotion },
+  return emotions.map(e => ({
+    params: { slug: e.name.toLowerCase().replace(/\s+/g, '-') },
+    props: { emotion: e },
   }));
 }
 
-const { emotion } = Astro.props;
+// 1. Get the slug from the URL
+const { slug } = Astro.params;
+
+// 2. Try to get the emotion from static props, or search the array directly
+const emotion = Astro.props.emotion || emotions.find(e => e.name.toLowerCase().replace(/\s+/g, '-') === slug);
+
+// 3. THE FIX: If the emotion doesn't exist, safely redirect to home instead of crashing
+if (!emotion) {
+  return Astro.redirect('/');
+}
 ---
 
 <!doctype html>
